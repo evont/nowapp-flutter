@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:nowapp_flutter/home.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(new MainApp());
 
-class MyApp extends StatelessWidget {
+class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Welcome to Flutter',
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Welcome to Flutter'),
-        ),
-        body: new Center(
-          child: new Text('Hello World'),
-        ),
-      ),
+    return MaterialApp(
+      home: HomePage(),
     );
   }
 }
