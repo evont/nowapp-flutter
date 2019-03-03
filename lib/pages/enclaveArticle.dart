@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class EnclaveArticlePage extends StatefulWidget {
+  final String article_id;
+  EnclaveArticlePage({Key key, @required this.article_id}) : super(key: key);
   @override
   _EnclavePageArticleState createState() => _EnclavePageArticleState();
 }
