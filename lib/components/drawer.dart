@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:nowapp_flutter/pages/enclave.dart';
+import 'package:nowapp_flutter/pages/essay.dart';
+import 'package:nowapp_flutter/pages/poem.dart';
+import 'package:nowapp_flutter/pages/totheend.dart';
 
 class SideDrawer extends StatefulWidget {
   @override
@@ -68,7 +72,9 @@ Widget _navList(BuildContext context) {
         child: new FlatButton(
           child: _btnContent('搜韵', '让诗词融入生活'),
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.of(context).push(new MaterialPageRoute(builder: (ctx) {
+              return new PoemPage();
+            }));
           },
         ),
       ),
@@ -76,7 +82,9 @@ Widget _navList(BuildContext context) {
         child: new FlatButton(
           child: _btnContent('飞地', '独立思考的精神'),
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.of(context).push(new MaterialPageRoute(builder: (ctx) {
+              return new EnclavePage();
+            }));
           },
         ),
       ),
@@ -84,7 +92,9 @@ Widget _navList(BuildContext context) {
         child: new FlatButton(
           child: _btnContent('万古', '深度、多元与价值'),
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.of(context).push(new MaterialPageRoute(builder: (ctx) {
+              return new EssayPage();
+            }));
           },
         ),
       ),
@@ -92,7 +102,9 @@ Widget _navList(BuildContext context) {
         child: new FlatButton(
           child: _btnContent('观止', '只为简单的纯净的阅读而生'),
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.of(context).push(new MaterialPageRoute(builder: (ctx) {
+              return new TotheendPage();
+            }));
           },
         ),
       )

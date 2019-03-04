@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nowapp_flutter/components/drawer.dart';
-import 'package:nowapp_flutter/pages/enclave.dart';
-import 'package:nowapp_flutter/pages/poem.dart';
-import 'package:nowapp_flutter/pages/totheend.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,21 +12,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: _appbar,
       drawer: SideDrawer(),
-      body: new Column(
-        children:<Widget>[
-          new Container(
-            padding: const EdgeInsets.only(left: 15,top: 30, right: 15),
-            child: PoemPage(),
-          ),
-          new Container(
-            padding: const EdgeInsets.only(left: 15,top: 30, right: 15),
-            child: EnclavePage(),
-          ),
-          new Container(
-            padding: const EdgeInsets.only(left: 15,top: 30, right: 15),
-            child: TotheendPage(),
-          ),
-        ]
+      body: Center(
+        child: new Text('home'),
       ),
     );
   }
