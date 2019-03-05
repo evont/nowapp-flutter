@@ -16,6 +16,7 @@ HomeModel _$HomeModelFromJson(Map<String, dynamic> json) {
       cDay: json['cDay'] as int,
       ncWeek: json['ncWeek'] as String,
       monthAlias: json['monthAlias'] as String,
+      term: json['Term'] as String,
       iMonthCn: json['IMonthCn'] as String,
       iDayCn: json['IDayCn'] as String,
       phase: json['phase'] == null
@@ -32,18 +33,23 @@ Map<String, dynamic> _$HomeModelToJson(HomeModel instance) => <String, dynamic>{
       'cDay': instance.cDay,
       'ncWeek': instance.ncWeek,
       'monthAlias': instance.monthAlias,
+      'Term': instance.term,
       'IMonthCn': instance.iMonthCn,
       'IDayCn': instance.iDayCn,
       'phase': instance.phase
     };
 
 Phase _$PhaseFromJson(Map<String, dynamic> json) {
-  return Phase((json['fraction'] as num)?.toDouble(),
-      (json['phase'] as num)?.toDouble(), (json['angle'] as num)?.toDouble());
+  return Phase(
+      (json['fraction'] as num)?.toDouble(),
+      (json['phase'] as num)?.toDouble(),
+      (json['angle'] as num)?.toDouble(),
+      json['phaseName'] as String);
 }
 
 Map<String, dynamic> _$PhaseToJson(Phase instance) => <String, dynamic>{
       'fraction': instance.fraction,
       'phase': instance.phase,
-      'angle': instance.angle
+      'angle': instance.angle,
+      'phaseName': instance.phaseName
     };
