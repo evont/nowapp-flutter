@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'dart:math';
 import 'package:nowapp_flutter/widget/slider.dart';
 import 'package:nowapp_flutter/model/HomeModel.dart';
 
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: Material(
-        color: Colors.black87,
+        color: const Color(0xFF444444),
         child: SafeArea(
           child: new Column(
             children: <Widget>[
@@ -54,6 +54,7 @@ class _HomePageState extends State<HomePage>{
                 child: new Column(
                     children: <Widget>[
                       _date(context, data),
+                      _moonPhase(context, data),
                     ],
                   ),
                 )
@@ -94,9 +95,9 @@ class _Body extends StatelessWidget {
     return SlideStack(
       child: SlideContainer(
         key: _slideKey,
-        transform: Matrix4.translationValues(0, _height - 120, 0),
+        transform: Matrix4.translationValues(0, _height - 180, 0),
         slideDirection: SlideDirection.bottom,
-        drawerSize: _height - 120,
+        drawerSize: _height - 180,
         child: Material(
           color: Colors.white,
           borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
@@ -151,14 +152,73 @@ Widget _date(BuildContext context, HomeModel data) {
           width: 220,
           child: new Text('${data.iMonthCn}${data.iDayCn} / ${data.phase.phaseName}', style: new TextStyle(fontFamily: 'Syst', fontSize: 22, color: Colors.white )),
         ),
-        _phase(context, data),
       ],
     )
   );
 }
 
-Widget _phase(BuildContext context, HomeModel data) {
+Widget _moonPhase(BuildContext context, HomeModel data) {
   return new Container(
-    
+    child: new Stack(
+      children: <Widget>[
+        new Image(image: new AssetImage('assets/moon.png'), width: 240),
+        new CustomPaint(
+          size: Size(240, 240), 
+          painter: Phase(phase: data.phase.phase),
+        ),
+      ],
+    ),
   );
+}
+
+class Phase extends CustomPainter{
+  final double phase;
+  Phase({ this.phase });
+  @override
+  void paint(Canvas canvas, Size size) {
+    Color shadowColor = Colors.black45;
+    Color lightColor = Colors.white;
+    Color _bgColor;
+    Color _borderColor;
+    Rect rect = Rect.fromLTWH(0, 0, size.width * 0.3, size.height);
+    double _strokeWidth = 0;
+    MaskFilter _filter = MaskFilter.blur(BlurStyle.normal, 10);
+    if (phase <= 0.25) {
+      _borderColor = lightColor;
+      _bgColor = shadowColor;
+    } else if (phase <= 0.5) {
+      _borderColor = shadowColor;
+      _bgColor = lightColor;
+    } else if (phase <= 0.75) {
+      _borderColor = lightColor;
+      _bgColor = lightColor;
+    } else {
+      _strokeWidth = (1 - phase) / 0.25 * size.width;
+      _borderColor = lightColor;
+      _bgColor = shadowColor;
+    }
+    canvas.drawCircle(
+      Offset(size.width / 2 + 2, size.height / 2 + 2),
+      size.width / 2,
+      Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.fill
+      ..color = _bgColor
+      ..maskFilter = _filter
+    );
+    canvas.drawArc(
+      rect,
+      -pi / 2,
+      -pi,
+      false,
+      Paint()
+      ..isAntiAlias = true
+      ..style = PaintingStyle.fill
+      ..strokeWidth = _strokeWidth
+      ..color = _borderColor
+    );
+    
+  }
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
