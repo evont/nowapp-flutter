@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage>{
     "monthAlias": "霞初月",
     "phase": {
       "fraction": 0.022881766015456606,
-      "phase": 0.9516646120556265,
+      "phase": 0.750000001,
       "phaseName": "晓月",
       "angle": 1.0624470443293312
     }
@@ -176,47 +176,87 @@ class Phase extends CustomPainter{
   Phase({ this.phase });
   @override
   void paint(Canvas canvas, Size size) {
-    Color shadowColor = Colors.black45;
-    Color lightColor = Colors.white;
-    Color _bgColor;
-    Color _borderColor;
-    Rect rect = Rect.fromLTWH(0, 0, size.width * 0.3, size.height);
-    double _strokeWidth = 0;
-    MaskFilter _filter = MaskFilter.blur(BlurStyle.normal, 10);
+    Color shadowColor = Colors.black54;
+    MaskFilter _filter = MaskFilter.blur(BlurStyle.normal, 3);
+
     if (phase <= 0.25) {
-      _borderColor = lightColor;
-      _bgColor = shadowColor;
+      // left
+      canvas.drawArc(
+        Rect.fromLTWH(0, 0, size.width, size.height),
+        -pi / 2,
+        -pi,
+        false,
+        Paint()
+        ..isAntiAlias = true
+        ..style = PaintingStyle.fill
+        ..color = shadowColor
+        ..maskFilter = _filter
+      );
+      double _shadowWidth = size.width - phase / 0.25 * size.width;
+      // right
+      canvas.drawArc(
+        Rect.fromLTWH((size.width - _shadowWidth)/ 2, 0, _shadowWidth, size.height),
+        -pi / 2,
+        pi,
+        false,
+        Paint()
+        ..isAntiAlias = true
+        ..style = PaintingStyle.fill
+        ..color = shadowColor
+        ..maskFilter = _filter
+      );
     } else if (phase <= 0.5) {
-      _borderColor = shadowColor;
-      _bgColor = lightColor;
+      double _shadowWidth = size.width - (0.5 - phase) / 0.25 * size.width;
+      Path path = Path()
+                    ..moveTo(size.width / 2, 0)
+                    ..arcTo(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2), -pi / 2, -pi, false)
+                    ..cubicTo((size.width - _shadowWidth) / 2, size.height / 4 * 3, (size.width - _shadowWidth) / 2, size.height / 4, size.width / 2, 0);
+      canvas.drawPath(path, Paint()
+        ..isAntiAlias = true
+        ..style = PaintingStyle.fill
+        ..color = shadowColor
+        ..maskFilter = _filter);
     } else if (phase <= 0.75) {
-      _borderColor = lightColor;
-      _bgColor = lightColor;
+      
+      double _shadowWidth = size.width - (0.75 - phase) / 0.25 * size.width;
+      Path path = Path()
+                  ..moveTo(size.width / 2, 0)
+                  ..arcTo(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2), -pi / 2, pi, true)
+                  ..cubicTo(size.width - _shadowWidth / 2, size.height / 4 * 3, size.width - _shadowWidth / 2, size.height / 4, size.width / 2, 0);
+
+      canvas.drawPath(path, 
+        Paint()
+        ..isAntiAlias = true
+        ..style = PaintingStyle.fill
+        ..color = shadowColor
+        ..maskFilter = _filter);
     } else {
-      _strokeWidth = (1 - phase) / 0.25 * size.width;
-      _borderColor = lightColor;
-      _bgColor = shadowColor;
+      canvas.drawArc(
+        Rect.fromLTWH(0, 0, size.width, size.height),
+        -pi / 2,
+        pi,
+        false,
+        Paint()
+        ..isAntiAlias = true
+        ..style = PaintingStyle.fill
+        ..color = shadowColor
+        ..maskFilter = _filter
+      );
+      double _shadowWidth = size.width - (1 - phase) / 0.25 * size.width;
+      // right
+      canvas.drawArc(
+        Rect.fromLTWH((size.width - _shadowWidth)/ 2, 0, _shadowWidth, size.height),
+        -pi / 2,
+        -pi,
+        false,
+        Paint()
+        ..isAntiAlias = true
+        ..style = PaintingStyle.fill
+        ..color = shadowColor
+        ..maskFilter = _filter
+      );
     }
-    canvas.drawCircle(
-      Offset(size.width / 2 + 2, size.height / 2 + 2),
-      size.width / 2,
-      Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..color = _bgColor
-      ..maskFilter = _filter
-    );
-    canvas.drawArc(
-      rect,
-      -pi / 2,
-      -pi,
-      false,
-      Paint()
-      ..isAntiAlias = true
-      ..style = PaintingStyle.fill
-      ..strokeWidth = _strokeWidth
-      ..color = _borderColor
-    );
+    
     
   }
   @override
