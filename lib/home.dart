@@ -97,23 +97,49 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final double _height = MediaQuery.of(context).size.height;
     final double _width = MediaQuery.of(context).size.width;
+    final double _diffSize = 190;
     return SlideStack(
       child: SlideContainer(
         key: _slideKey,
-        transform: Matrix4.translationValues(0, _height - 230, 0),
+        // transform: Matrix4.translationValues(0, _height - _diffSize, 0),
         slideDirection: SlideDirection.bottom,
-        drawerSize: _height - 230,
+        drawerSize: _height - _diffSize,
         child: Material(
           color: Colors.white,
           borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
           child: Container(
-            margin: const EdgeInsets.all(20.0),
+            margin: const EdgeInsets.all(10.0),
             width: _width,
             height: _height,
             child: new TabContainer(
               tabTexts: ['搜韵', '飞地', '观止'], 
               tabViews: [new PoemPage(), new EnclavePage(), new TotheendPage()], 
-              title: new Text('发现')
+              title: new Column(
+                children: <Widget>[
+                  new Container(
+                    height: 5,
+                    width:_width * 0.3,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                    ),
+                  ),
+                  new Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(left: 20),
+                        child: new Text('发现', style: TextStyle(fontSize: 18)),
+                      ),
+                      new Expanded(child: new Container()),
+                      Container(
+                        padding: EdgeInsets.only(right: 20),
+                        child: new Text('今年进度：$daysPercent%', style: TextStyle(color: Colors.black54, fontSize: 12)),
+                      ),  
+                    ],
+                  )
+                ],
+              )
             ),
           )
         ),
@@ -128,6 +154,15 @@ class _Body extends StatelessWidget {
         )
       )
     );
+  }
+  get daysPercent {
+    DateTime now = new DateTime.now();
+    int nowYear = now.year;
+    DateTime startOfYear = new DateTime(nowYear);
+    bool isLeap = nowYear % 4 == 0 ? true : false;
+    int fullDays = isLeap ? 365 : 366;
+    Duration duration = now.difference(startOfYear);
+    return (duration.inDays / fullDays * 100).toStringAsFixed(2);
   }
 }
 

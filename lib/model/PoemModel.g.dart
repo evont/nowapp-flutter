@@ -18,27 +18,28 @@ Map<String, dynamic> _$PoemModelToJson(PoemModel instance) =>
     <String, dynamic>{'Date': instance.date, 'Content': instance.content};
 
 Content _$ContentFromJson(Map<String, dynamic> json) {
-  return Content(json['poem'] == null
-      ? null
-      : Poem.fromJson(json['poem'] as Map<String, dynamic>));
+  return Content(
+      poem: json['Poem'] == null
+          ? null
+          : Poem.fromJson(json['Poem'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$ContentToJson(Content instance) =>
-    <String, dynamic>{'poem': instance.poem};
+    <String, dynamic>{'Poem': instance.poem};
 
 Poem _$PoemFromJson(Map<String, dynamic> json) {
   return Poem(
-      json['Id'] as int,
-      json['Author'] as String,
-      json['Dynasty'] as String,
-      (json['Clauses'] as List)
+      id: json['Id'] as int,
+      author: json['Author'] as String,
+      dynasty: json['Dynasty'] as String,
+      clauses: (json['Clauses'] as List)
           ?.map((e) =>
               e == null ? null : Detail.fromJson(e as Map<String, dynamic>))
           ?.toList(),
-      json['Title'] == null
+      title: json['Title'] == null
           ? null
           : Detail.fromJson(json['Title'] as Map<String, dynamic>),
-      json['IsTwoClausesPerSentence'] as bool);
+      isTwoClausesPerSentence: json['IsTwoClausesPerSentence'] as bool);
 }
 
 Map<String, dynamic> _$PoemToJson(Poem instance) => <String, dynamic>{
@@ -51,8 +52,49 @@ Map<String, dynamic> _$PoemToJson(Poem instance) => <String, dynamic>{
     };
 
 Detail _$DetailFromJson(Map<String, dynamic> json) {
-  return Detail(json['Content'] as String);
+  return Detail(
+      content: json['Content'] as String,
+      breakAfter: json['BreakAfter'] as bool,
+      comments: (json['Comments'] as List)
+          ?.map((e) =>
+              e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
+          ?.toList());
 }
 
-Map<String, dynamic> _$DetailToJson(Detail instance) =>
-    <String, dynamic>{'Content': instance.content};
+Map<String, dynamic> _$DetailToJson(Detail instance) {
+  final val = <String, dynamic>{
+    'Content': instance.content,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('BreakAfter', instance.breakAfter);
+  writeNotNull('Comments', instance.comments);
+  return val;
+}
+
+Comment _$CommentFromJson(Map<String, dynamic> json) {
+  return Comment(
+      content: (json['Content'] as List)?.map((e) => e as String)?.toList(),
+      type: json['Type'] as String,
+      index: json['Index'] as int);
+}
+
+Map<String, dynamic> _$CommentToJson(Comment instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('Type', instance.type);
+  writeNotNull('Content', instance.content);
+  writeNotNull('Index', instance.index);
+  return val;
+}

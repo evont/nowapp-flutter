@@ -17,8 +17,9 @@ class PoemModel {
 
 @JsonSerializable()
 class Content {
+  @JsonKey(name: 'Poem')
   Poem poem;
-  Content(this.poem);
+  Content({this.poem});
   factory Content.fromJson(Map<String, dynamic> srcJson) => _$ContentFromJson(srcJson); 
 }
 
@@ -36,7 +37,7 @@ class Poem {
   List<Detail> clauses;
   @JsonKey(name: 'Title')
   Detail title;
-  Poem(this.id, this.author, this.dynasty, this.clauses, this.title, this.isTwoClausesPerSentence);
+  Poem({this.id, this.author, this.dynasty, this.clauses, this.title, this.isTwoClausesPerSentence});
   factory Poem.fromJson(Map<String, dynamic> srcJson) => _$PoemFromJson(srcJson); 
 }
 
@@ -44,6 +45,23 @@ class Poem {
 class Detail {
   @JsonKey(name: 'Content')
   String content;
-  Detail(this.content);
+  @JsonKey(name: 'BreakAfter', includeIfNull: false)
+  bool breakAfter;
+  @JsonKey(name: 'Comments', includeIfNull: false)
+  List<Comment> comments;
+  
+  Detail({ this.content, this.breakAfter, this.comments });
   factory Detail.fromJson(Map<String, dynamic> srcJson) => _$DetailFromJson(srcJson); 
+}
+
+@JsonSerializable()
+class Comment {
+  @JsonKey(name: 'Type', includeIfNull: false)
+  String type;
+  @JsonKey(name: 'Content', includeIfNull: false)
+  List<String> content;
+  @JsonKey(name: 'Index', includeIfNull: false)
+  int index;
+  Comment({ this.content, this.type, this.index });
+  factory Comment.fromJson(Map<String, dynamic> srcJson) => _$CommentFromJson(srcJson); 
 }

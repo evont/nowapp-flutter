@@ -47,7 +47,6 @@ class MoonPhase extends CustomPainter{
         ..maskFilter = _filter);
     } else if (phase <= 0.75) {
       double _shadowWidth = (0.75 - phase) / 0.25 * size.width;
-      print(_shadowWidth);
       Path path = Path()
                   ..moveTo(size.width / 2, 0)
                   ..arcTo(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: _shadowWidth / 2), -pi / 2, pi, true)
