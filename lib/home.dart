@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:nowapp_flutter/widget/slider.dart';
+import 'package:nowapp_flutter/widget/phase.dart';
+import 'package:nowapp_flutter/widget/tab.dart';
 import 'package:nowapp_flutter/model/HomeModel.dart';
+
+import 'package:nowapp_flutter/pages/poem.dart';
+import 'package:nowapp_flutter/pages/enclave.dart';
+import 'package:nowapp_flutter/pages/totheend.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -95,9 +100,9 @@ class _Body extends StatelessWidget {
     return SlideStack(
       child: SlideContainer(
         key: _slideKey,
-        transform: Matrix4.translationValues(0, _height - 180, 0),
+        transform: Matrix4.translationValues(0, _height - 230, 0),
         slideDirection: SlideDirection.bottom,
-        drawerSize: _height - 180,
+        drawerSize: _height - 230,
         child: Material(
           color: Colors.white,
           borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
@@ -105,7 +110,11 @@ class _Body extends StatelessWidget {
             margin: const EdgeInsets.all(20.0),
             width: _width,
             height: _height,
-            child: new Text('discover'),
+            child: new TabContainer(
+              tabTexts: ['搜韵', '飞地', '观止'], 
+              tabViews: [new PoemPage(), new EnclavePage(), new TotheendPage()], 
+              title: new Text('发现')
+            ),
           )
         ),
       ),
@@ -164,101 +173,10 @@ Widget _moonPhase(BuildContext context, HomeModel data) {
         new Image(image: new AssetImage('assets/moon.png'), width: 240),
         new CustomPaint(
           size: Size(240, 240), 
-          painter: Phase(phase: data.phase.phase),
+          painter: new MoonPhase(phase: 0.50001),
         ),
       ],
     ),
   );
 }
 
-class Phase extends CustomPainter{
-  final double phase;
-  Phase({ this.phase });
-  @override
-  void paint(Canvas canvas, Size size) {
-    Color shadowColor = Colors.black54;
-    MaskFilter _filter = MaskFilter.blur(BlurStyle.normal, 3);
-
-    if (phase <= 0.25) {
-      // left
-      canvas.drawArc(
-        Rect.fromLTWH(0, 0, size.width, size.height),
-        -pi / 2,
-        -pi,
-        false,
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter
-      );
-      double _shadowWidth = size.width - phase / 0.25 * size.width;
-      // right
-      canvas.drawArc(
-        Rect.fromLTWH((size.width - _shadowWidth)/ 2, 0, _shadowWidth, size.height),
-        -pi / 2,
-        pi,
-        false,
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter
-      );
-    } else if (phase <= 0.5) {
-      double _shadowWidth = size.width - (0.5 - phase) / 0.25 * size.width;
-      Path path = Path()
-                    ..moveTo(size.width / 2, 0)
-                    ..arcTo(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2), -pi / 2, -pi, false)
-                    ..cubicTo((size.width - _shadowWidth) / 2, size.height / 4 * 3, (size.width - _shadowWidth) / 2, size.height / 4, size.width / 2, 0);
-      canvas.drawPath(path, Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter);
-    } else if (phase <= 0.75) {
-      
-      double _shadowWidth = size.width - (0.75 - phase) / 0.25 * size.width;
-      Path path = Path()
-                  ..moveTo(size.width / 2, 0)
-                  ..arcTo(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2), -pi / 2, pi, true)
-                  ..cubicTo(size.width - _shadowWidth / 2, size.height / 4 * 3, size.width - _shadowWidth / 2, size.height / 4, size.width / 2, 0);
-
-      canvas.drawPath(path, 
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter);
-    } else {
-      canvas.drawArc(
-        Rect.fromLTWH(0, 0, size.width, size.height),
-        -pi / 2,
-        pi,
-        false,
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter
-      );
-      double _shadowWidth = size.width - (1 - phase) / 0.25 * size.width;
-      // right
-      canvas.drawArc(
-        Rect.fromLTWH((size.width - _shadowWidth)/ 2, 0, _shadowWidth, size.height),
-        -pi / 2,
-        -pi,
-        false,
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter
-      );
-    }
-    
-    
-  }
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
