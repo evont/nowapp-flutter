@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage>{
       body: Material(
         color: const Color(0xFF444444),
         child: SafeArea(
+          bottom: false,
           child: new Column(
             children: <Widget>[
               new Container(

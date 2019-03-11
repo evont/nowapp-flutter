@@ -11,11 +11,17 @@ PoemModel _$PoemModelFromJson(Map<String, dynamic> json) {
       date: json['Date'] as String,
       content: json['Content'] == null
           ? null
-          : Content.fromJson(json['Content'] as Map<String, dynamic>));
+          : Content.fromJson(json['Content'] as Map<String, dynamic>),
+      index: json['Index'] as int,
+      total: json['Total'] as int);
 }
 
-Map<String, dynamic> _$PoemModelToJson(PoemModel instance) =>
-    <String, dynamic>{'Date': instance.date, 'Content': instance.content};
+Map<String, dynamic> _$PoemModelToJson(PoemModel instance) => <String, dynamic>{
+      'Date': instance.date,
+      'Content': instance.content,
+      'Index': instance.index,
+      'Total': instance.total
+    };
 
 Content _$ContentFromJson(Map<String, dynamic> json) {
   return Content(
@@ -79,7 +85,7 @@ Map<String, dynamic> _$DetailToJson(Detail instance) {
 
 Comment _$CommentFromJson(Map<String, dynamic> json) {
   return Comment(
-      content: (json['Content'] as List)?.map((e) => e as String)?.toList(),
+      content: json['Content'] as String,
       type: json['Type'] as String,
       index: json['Index'] as int);
 }

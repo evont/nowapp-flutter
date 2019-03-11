@@ -8,7 +8,11 @@ class PoemModel {
   String date;
   @JsonKey(name: 'Content')
   Content content;
-  PoemModel({ this.date, this.content });
+  @JsonKey(name: 'Index')
+  int index;
+  @JsonKey(name: 'Total')
+  int total;
+  PoemModel({ this.date, this.content, this.index, this.total });
   
   factory PoemModel.fromJson(Map<String, dynamic> json) => _$PoemModelFromJson(json);
 
@@ -59,7 +63,7 @@ class Comment {
   @JsonKey(name: 'Type', includeIfNull: false)
   String type;
   @JsonKey(name: 'Content', includeIfNull: false)
-  List<String> content;
+  String content;
   @JsonKey(name: 'Index', includeIfNull: false)
   int index;
   Comment({ this.content, this.type, this.index });

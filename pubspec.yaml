@@ -21,7 +21,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: 2.0.11
   json_annotation: ^2.0.0
-  animated_text_kit: ^1.3.0
+  fluttertoast: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +48,8 @@ flutter:
   assets:
     - assets/icon-close.png
     - assets/icon-menu.png
+    - assets/icon-left.png
+    - assets/icon-right.png
     - assets/moon.png
   # To add assets to your application, add an assets section, like this:
   # assets:
