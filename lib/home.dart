@@ -114,7 +114,7 @@ class _Body extends StatelessWidget {
             height: _height,
             child: new TabContainer(
               tabTexts: ['搜韵', '飞地', '观止'], 
-              tabViews: [new PoemPage(), new EnclavePage(), new TotheendPage()], 
+              tabViews: [new EnclavePage(), new PoemPage(),new TotheendPage()], 
               title: new Column(
                 children: <Widget>[
                   new Container(
