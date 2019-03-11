@@ -13,6 +13,7 @@ class EnclaveListModel {
 
 @JsonSerializable()
 class Result {
+  PageInfo pageInfo;
   List<Article> articleRecommend;
   List<Article> article;
   Topic topic;
@@ -22,9 +23,17 @@ class Result {
 }
 
 @JsonSerializable()
+class PageInfo {
+  int total;
+  String currentPage;
+  PageInfo({ this.total, this.currentPage });
+  factory PageInfo.fromJson(Map<String, dynamic> json) => _$PageInfoFromJson(json);
+}
+
+@JsonSerializable()
 class Article {
   String cateName;
-  String artId;
+  int artId;
   String artTitle;
   String artEditor;
   String artThumb;

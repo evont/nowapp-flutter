@@ -28,20 +28,34 @@ Result _$ResultFromJson(Map<String, dynamic> json) {
       date: json['date'] as int,
       topic: json['topic'] == null
           ? null
-          : Topic.fromJson(json['topic'] as Map<String, dynamic>));
+          : Topic.fromJson(json['topic'] as Map<String, dynamic>))
+    ..pageInfo = json['pageInfo'] == null
+        ? null
+        : PageInfo.fromJson(json['pageInfo'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$ResultToJson(Result instance) => <String, dynamic>{
+      'pageInfo': instance.pageInfo,
       'articleRecommend': instance.articleRecommend,
       'article': instance.article,
       'topic': instance.topic,
       'date': instance.date
     };
 
+PageInfo _$PageInfoFromJson(Map<String, dynamic> json) {
+  return PageInfo(
+      total: json['total'] as int, currentPage: json['currentPage'] as String);
+}
+
+Map<String, dynamic> _$PageInfoToJson(PageInfo instance) => <String, dynamic>{
+      'total': instance.total,
+      'currentPage': instance.currentPage
+    };
+
 Article _$ArticleFromJson(Map<String, dynamic> json) {
   return Article(
       cateName: json['cateName'] as String,
-      artId: json['artId'] as String,
+      artId: json['artId'] as int,
       artEditor: json['artEditor'] as String,
       artThumb: json['artThumb'] as String,
       artTime: json['artTime'] as int)
