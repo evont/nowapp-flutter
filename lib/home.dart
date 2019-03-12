@@ -12,14 +12,60 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:convert';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
+  get future async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var initData = prefs.getString('home') != null ? jsonDecode(prefs.getString('home')) : {
+      "lYear": 1900,
+      "lMonth": 1,
+      "lDay": 1,
+      "Animal": "",
+      "IMonthCn": "",
+      "IDayCn": "",
+      "cYear": 1900,
+      "cMonth": 1,
+      "cDay": 1,
+      "gzYear": "",
+      "gzMonth": "",
+      "gzDay": "",
+      "isToday": false,
+      "isLeap": false,
+      "nWeek": 1,
+      "ncWeek": "",
+      "isTerm": false,
+      "Term": "",
+      "astro": "",
+      "monthAlias": "",
+      "phase": {
+      "fraction": 0,
+      "phase": 0,
+      "phaseName": "",
+      "angle": 0
+      }
+    };
+    return HomeModel.fromJson(initData);
+  }
+  @override
+  Widget build(BuildContext context) {
+    return new FutureBuilder(
+      future: future,
+      builder:  (_, AsyncSnapshot snapshot) {
+        return MaterialApp(
+          home: _HomePage(snapshot.data),
+        );
+      }
+    );
+  }
+}
+
+class _HomePage extends StatefulWidget {
   final HomeModel initalData;
-  HomePage(this.initalData);
+  _HomePage(this.initalData);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<_HomePage>{
   HomeModel data;
   Future future;
   @override

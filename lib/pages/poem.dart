@@ -64,14 +64,14 @@ class _PoemFutureState extends State<_PoemFuture> {
                       Expanded(
                         child: Stack(
                           fit: StackFit.expand,
-                          alignment: Alignment.center,
+                          alignment: Alignment.topCenter,
                           children: <Widget>[
                             new Container(
                               child: new SingleChildScrollView(
                                 child: new Column(
                                   children: <Widget>[
                                     new Container(
-                                      margin: const EdgeInsets.only(top: 80),
+                                      margin: const EdgeInsets.only(top: 20),
                                       padding: const EdgeInsets.only(left: 50, right: 50),
                                       child: new Text(_title, style: TextStyle( fontSize: 20, fontWeight: FontWeight.w600 )),
                                     ),
@@ -183,7 +183,7 @@ Widget _poemClauses(BuildContext context, PoemModel data) {
       var content = _clause.content;
       _poemClauses.add(new Text(content));
       
-      bool isBreak = _clause.breakAfter != null && _clause.breakAfter != false;
+      bool isBreak = _clause.breakAfter != null;
       bool isDivided = _poem.isTwoClausesPerSentence && i % 2 == 1;
       bool isEndMark = '。；！？'.indexOf(_clause.content.substring(_clause.content.length - 1)) >= 0;
       if ((isDivided || isEndMark)|| isBreak)
