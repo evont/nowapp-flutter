@@ -3,6 +3,8 @@ import 'package:nowapp_flutter/model/EnclaveListModel.dart';
 import 'package:nowapp_flutter/util/Api.dart';
 import 'package:nowapp_flutter/widget/loadmore.dart';
 
+import 'package:nowapp_flutter/pages/enclaveArticle.dart';
+
 class EnclavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,14 +22,18 @@ class _EnclaveFutureState extends State<_EnclaveFuture> {
   bool isLoading = true;
   List enclaveList = [];
   var pageInfo;
-  int count = 1;
+  int get count => enclaveList.length;
   int prevPage = 0;
   @override
   void initState() {
     super.initState();
     loadData();
   }
-  void loadData() async {
+  @override
+  dispose() {
+    super.dispose();
+  }
+  loadData() async {
     DateTime now = new DateTime.now();
     DateTime today = DateTime.utc(now.year, now.month, now.day);
     String todayMill = today.millisecondsSinceEpoch.toString();
@@ -40,12 +46,10 @@ class _EnclaveFutureState extends State<_EnclaveFuture> {
       }
     }
     int page = pageInfo == null ? 1 : int.parse(pageInfo.currentPage) + 1;
-    print('$prevPage-$page-$timestamp');
     
     if (prevPage != page) {
       final data = await ApiClient.request(Api.ENCLAVE, { 'page': page, 'timestamp': timestamp });
       EnclaveListModel enclave = new EnclaveListModel.fromJson(data);
-      print(data);
       if (enclave.result.articleRecommend != null && page == 1) {
         enclaveList = enclave.result.articleRecommend;
       }
@@ -55,13 +59,12 @@ class _EnclaveFutureState extends State<_EnclaveFuture> {
         model = enclave;
         isLoading = false;
         pageInfo = enclave.result.pageInfo;
-        count = page == 1 ? enclaveList.length : 1;
         prevPage = page;
       });
     }
   }
   Future<bool> _loadMore() async{
-    loadData();
+    await loadData();
     return true;
   }
   @override
@@ -94,49 +97,65 @@ class _EnclaveFutureState extends State<_EnclaveFuture> {
 
 Widget enclaveBook(BuildContext context, data) {
   double _width = MediaQuery.of(context).size.width;
-  return new Column(
-    children: <Widget>[
-      new Stack(
-        children: <Widget>[
-          new Container(
-            width: _width,
-            height: _width * 0.5,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              image: DecorationImage(
-                image: new NetworkImage(data.artThumb),
-                fit: BoxFit.fitWidth,
-              )
+  return GestureDetector(
+    behavior: HitTestBehavior.translucent,
+    onTap: () {
+      Navigator.of(context).push(new MaterialPageRoute(builder: (context) {
+        return Scaffold(
+          body: Material(
+            color: const Color(0xFFFFFF),
+            child: SafeArea(
+              bottom: false,
+              child: new EnclaveArticlePage(articleId: data.artId),
             ),
           ),
-          Positioned(
-            left: 10,
-            bottom: 6,
-            child: new Container(
-              padding: const EdgeInsets.only(left: 8, top: 3, bottom: 3, right: 8),
+        );
+      }));
+    },
+    child: new Column(
+      children: <Widget>[
+        new Stack(
+          children: <Widget>[
+            new Container(
+              width: _width,
+              height: _width * 0.5,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(6)),
-                color: Color(0xFFfddd6a),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                image: DecorationImage(
+                  image: new NetworkImage(data.artThumb),
+                  fit: BoxFit.fitWidth,
+                )
               ),
-              child: new Text(data.cateName),
             ),
-          )
-        ],
-      ),
-      new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Container(
-            padding: const EdgeInsets.only(top: 10, bottom: 5),
-            child: new Text(data.artTitle, style: TextStyle( fontWeight: FontWeight.w700, fontSize: 18 ),),
-          ),
-          new Container(
-            alignment: Alignment.bottomRight,
-            child: new Text(data.artEditor, textAlign: TextAlign.right, style: TextStyle( fontWeight: FontWeight.w300, fontSize: 12),),
-          )
-        ],
-      )
-      
-    ],
+            Positioned(
+              left: 10,
+              bottom: 6,
+              child: new Container(
+                padding: const EdgeInsets.only(left: 8, top: 3, bottom: 3, right: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  color: Color(0xFFfddd6a),
+                ),
+                child: new Text(data.cateName),
+              ),
+            )
+          ],
+        ),
+        new Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Container(
+              padding: const EdgeInsets.only(top: 10, bottom: 5),
+              child: new Text(data.artTitle, style: TextStyle( fontWeight: FontWeight.w700, fontSize: 18 ),),
+            ),
+            new Container(
+              alignment: Alignment.bottomRight,
+              child: new Text(data.artEditor, textAlign: TextAlign.right, style: TextStyle( fontWeight: FontWeight.w300, fontSize: 12),),
+            )
+          ],
+        )
+        
+      ],
+    ),
   );
 }

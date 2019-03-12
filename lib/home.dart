@@ -161,9 +161,9 @@ class _Body extends StatelessWidget {
     int nowYear = now.year;
     DateTime startOfYear = new DateTime(nowYear);
     bool isLeap = nowYear % 4 == 0 ? true : false;
-    int fullDays = isLeap ? 365 : 366;
+    int fullDays = isLeap ? 366 : 365;
     Duration duration = now.difference(startOfYear);
-    return (duration.inDays / fullDays * 100).toStringAsFixed(2);
+    return ((duration.inDays + 1) / fullDays * 100).toStringAsFixed(2);
   }
 }
 
