@@ -2,73 +2,86 @@ import 'package:flutter/material.dart';
 import 'package:nowapp_flutter/widget/slider.dart';
 import 'package:nowapp_flutter/widget/phase.dart';
 import 'package:nowapp_flutter/widget/tab.dart';
+import 'package:nowapp_flutter/util/Api.dart';
 import 'package:nowapp_flutter/model/HomeModel.dart';
 
 import 'package:nowapp_flutter/pages/poem.dart';
 import 'package:nowapp_flutter/pages/enclave.dart';
 import 'package:nowapp_flutter/pages/totheend.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'dart:convert';
 
 class HomePage extends StatefulWidget {
+  final HomeModel initalData;
+  HomePage(this.initalData);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage>{
-  var data = new HomeModel.fromJson({
-    "lYear": 2019,
-    "lMonth": 1,
-    "lDay": 29,
-    "Animal": "猪",
-    "IMonthCn": "正月",
-    "IDayCn": "廿九",
-    "cYear": 2019,
-    "cMonth": 3,
-    "cDay": 5,
-    "gzYear": "己亥",
-    "gzMonth": "丙寅",
-    "gzDay": "辛丑",
-    "isToday": true,
-    "isLeap": false,
-    "nWeek": 2,
-    "ncWeek": "火曜日",
-    "isTerm": false,
-    "Term": "草木萌动",
-    "astro": "双鱼座",
-    "monthAlias": "霞初月",
-    "phase": {
-      "fraction": 0.022881766015456606,
-      "phase": 0.750000001,
-      "phaseName": "晓月",
-      "angle": 1.0624470443293312
-    }
-  });
+  HomeModel data;
+  Future future;
+  @override
+  void initState() {
+    super.initState();
+    future = loadData();
+  }
+  loadData() async {
+    var _result = await ApiClient.request(Api.HOME);
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('home', _result is String ? _result : new JsonEncoder().convert(_result));
+    HomeModel result = new HomeModel.fromJson(_result);
+    return result;
+  }
   final GlobalKey<ContainerState> _slideKey = GlobalKey<ContainerState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Material(
-        color: const Color(0xFF444444),
-        child: SafeArea(
-          bottom: false,
-          child: new Column(
-            children: <Widget>[
-              new Container(
-                padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
-                child: _header(context, data),
-              ),
-              new Expanded(child: new _Body(
-                child: new Column(
+    return new FutureBuilder(
+      future: future,
+      initialData: widget.initalData,
+      builder: (_, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.active ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return new Center(
+            child: new CircularProgressIndicator(),
+          );
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          var data = snapshot.data;
+          if (snapshot.hasData) {
+            return Scaffold(
+              body: Material(
+                color: const Color(0xFF444444),
+                child: SafeArea(
+                  bottom: false,
+                  child: new Column(
                     children: <Widget>[
-                      _date(context, data),
-                      _moonPhase(context, data),
+                      new Container(
+                        padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
+                        child: _header(context, data),
+                      ),
+                      new Expanded(child: new _Body(
+                        child: new Column(
+                            children: <Widget>[
+                              _date(context, data),
+                              _moonPhase(context, data),
+                            ],
+                          ),
+                        )
+                      ),
                     ],
                   ),
                 )
-              ),
-            ],
-          ),
-        )
-      )
+              )
+            );
+          } else {
+            return new Center(
+              child: new CircularProgressIndicator(),
+            );
+          }
+        }
+      }
     );
   }
 }
@@ -98,11 +111,11 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final double _height = MediaQuery.of(context).size.height;
     final double _width = MediaQuery.of(context).size.width;
-    final double _diffSize = 190;
+    final double _diffSize = 200;
     return SlideStack(
       child: SlideContainer(
         key: _slideKey,
-        // transform: Matrix4.translationValues(0, _height - _diffSize, 0),
+        transform: Matrix4.translationValues(0, _height - _diffSize, 0),
         slideDirection: SlideDirection.bottom,
         drawerSize: _height - _diffSize,
         child: Material(
@@ -114,30 +127,33 @@ class _Body extends StatelessWidget {
             height: _height,
             child: new TabContainer(
               tabTexts: ['搜韵', '飞地', '观止'], 
-              tabViews: [new EnclavePage(), new PoemPage(),new TotheendPage()], 
+              tabViews: [new PoemPage(), new EnclavePage(), new TotheendPage()], 
               title: new Column(
                 children: <Widget>[
                   new Container(
                     height: 5,
                     width:_width * 0.3,
-                    margin: const EdgeInsets.only(bottom: 20),
+                    margin: const EdgeInsets.only(bottom: 15),
                     decoration: BoxDecoration(
                       color: Colors.black12,
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                     ),
                   ),
-                  new Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.only(left: 20),
-                        child: new Text('发现', style: TextStyle(fontSize: 18)),
-                      ),
-                      new Expanded(child: new Container()),
-                      Container(
-                        padding: EdgeInsets.only(right: 20),
-                        child: new Text('今年进度：$daysPercent%', style: TextStyle(color: Colors.black54, fontSize: 12)),
-                      ),  
-                    ],
+                  new Container(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: new Row(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(left: 20),
+                          child: new Text('发现', style: TextStyle(fontSize: 18)),
+                        ),
+                        new Expanded(child: new Container()),
+                        Container(
+                          padding: EdgeInsets.only(right: 20),
+                          child: new Text('今年进度：$daysPercent%', style: TextStyle(color: Colors.black54, fontSize: 12)),
+                        ),  
+                      ],
+                    ),
                   )
                 ],
               )
@@ -209,7 +225,7 @@ Widget _moonPhase(BuildContext context, HomeModel data) {
         new Image(image: new AssetImage('assets/moon.png'), width: 240),
         new CustomPaint(
           size: Size(240, 240), 
-          painter: new MoonPhase(phase: 0.50001),
+          painter: new MoonPhase(phase: data.phase.phase),
         ),
       ],
     ),

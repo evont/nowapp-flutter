@@ -23,6 +23,7 @@ dependencies:
   json_annotation: ^2.0.0
   fluttertoast: ^3.0.3
   flutter_html: ^0.9.4
+  shared_preferences: ^0.5.1+1
 
 dev_dependencies:
   flutter_test:
@@ -47,8 +48,6 @@ flutter:
         - asset: fonts/syst.otf
   
   assets:
-    - assets/icon-close.png
-    - assets/icon-menu.png
     - assets/icon-left.png
     - assets/icon-right.png
     - assets/moon.png

@@ -25,13 +25,9 @@ class _EnclaveFutureState extends State<_EnclaveFuture> {
   int get count => enclaveList.length;
   int prevPage = 0;
   @override
-  void initState() {
+  void initState() async{
     super.initState();
-    loadData();
-  }
-  @override
-  dispose() {
-    super.dispose();
+    await loadData();
   }
   loadData() async {
     DateTime now = new DateTime.now();

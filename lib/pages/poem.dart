@@ -51,24 +51,44 @@ class _PoemFutureState extends State<_PoemFuture> {
             var _index = data.index;
             var _date = data.date;
             final double _height = MediaQuery.of(context).size.height;
-            return new SingleChildScrollView(
-              child: Center(
-                child: DefaultTextStyle(
+            return DefaultTextStyle(
                   style: TextStyle(
                     fontFamily: 'Syst',
                     color: Color.fromRGBO(66, 66, 66, 1),
                     fontSize: 16,
+                    fontWeight: FontWeight.w300,
                     height: 1.5,
                   ),
                   child: new Column(
                     children: <Widget>[
                       Expanded(
                         child: Stack(
+                          fit: StackFit.expand,
                           alignment: Alignment.center,
                           children: <Widget>[
+                            new Container(
+                              child: new SingleChildScrollView(
+                                child: new Column(
+                                  children: <Widget>[
+                                    new Container(
+                                      margin: const EdgeInsets.only(top: 80),
+                                      padding: const EdgeInsets.only(left: 50, right: 50),
+                                      child: new Text(_title, style: TextStyle( fontSize: 20, fontWeight: FontWeight.w600 )),
+                                    ),
+                                    new Container(
+                                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                                      child:  new Text(_poem.author, style: TextStyle( fontSize: 14, color: Colors.black54 )),
+                                    ),
+                                    new Container(
+                                      child: _poemClauses(context, data),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                             Positioned(
                               left: 10,
-                              top: _height * 0.2,
+                              top: _height * 0.25,
                               child: new IconButton(
                                 icon: Image.asset('assets/icon-left.png'),
                                 onPressed: () {
@@ -89,10 +109,11 @@ class _PoemFutureState extends State<_PoemFuture> {
                             ),
                             Positioned(
                               right: 10,
-                              top: _height * 0.4,
+                              top: _height * 0.45,
                               child: new IconButton(
                                 icon: Image.asset('assets/icon-right.png'),
                                 onPressed: () {
+                                  print('fdaf');
                                   if (_index > 0 && _index >= _total) {
                                     Fluttertoast.showToast(
                                       msg: '没有更多了',
@@ -107,33 +128,15 @@ class _PoemFutureState extends State<_PoemFuture> {
                                 },
                               )
                             ),
-                            new Column(
-                              children: <Widget>[
-                                new Container(
-                                  margin: const EdgeInsets.only(top: 80),
-                                  child: new Text(_title, style: TextStyle( fontSize: 20 )),
-                                ),
-                                new Container(
-                                  padding: const EdgeInsets.only(top: 5, bottom: 5),
-                                  child:  new Text(_poem.author, style: TextStyle( fontSize: 14, color: Colors.black54 )),
-                                ),
-                                new Container(
-                                  child: _poemClauses(context, data),
-                                )
-                              ],
-                            ),
                           ],
                         ),
                       ),
                       new Container(
                         margin: const EdgeInsets.only(bottom: 20),
                         child: new Text(_date, style: TextStyle( color: Colors.black45 )),
-                      )
-                      
+                      ),
                     ],
                   )
-                ),
-              ),
             );
           }
         }

@@ -13,9 +13,14 @@ class Api {
 }
 
 class ApiClient {
-  static request(String url, [Map<String, dynamic> params = const {}]) async {
+  static request(String url, [ Map<String, dynamic> params ]) async {
     Dio dio = new Dio(new BaseOptions(responseType: ResponseType.json));
-    Response response = await dio.get(url, queryParameters: params);
-    return jsonDecode(response.data);
+    Response response;
+    if (params == null) {
+      response = await dio.get(url);
+    } else {
+      response = await dio.get(url, queryParameters: params);
+    }
+    return response.data is String ? jsonDecode(response.data) : response.data;
   }
 }

@@ -6,7 +6,7 @@ class MoonPhase extends CustomPainter{
   @override
   void paint(Canvas canvas, Size size) {
     Color shadowColor = Colors.black54;
-    MaskFilter _filter = MaskFilter.blur(BlurStyle.normal, 3);
+    MaskFilter _filter = MaskFilter.blur(BlurStyle.normal, 6);
 
     if (phase <= 0.25) {
       // left
@@ -36,24 +36,31 @@ class MoonPhase extends CustomPainter{
       );
     } else if (phase <= 0.5) {
       double _shadowWidth = (phase - 0.25) / 0.25 * size.width;
-      Path path = Path()
-                    ..moveTo(size.width / 2, 0)
-                    ..arcTo(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2), -pi / 2, -pi, false)
-                    ..cubicTo((size.width - _shadowWidth) / 2, size.height / 4 * 3, (size.width - _shadowWidth) / 2, size.height / 4, size.width / 2, 0);
-      canvas.drawPath(path, Paint()
+      Path outer = Path()
+                  ..moveTo(size.width / 2, 0)
+                  ..arcTo(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2), -pi / 2, -pi, true);
+      Path inner = Path()
+                  ..moveTo(size.width / 2, 0)
+                  ..arcTo(Rect.fromLTWH((size.width - _shadowWidth)/ 2, 0, _shadowWidth, size.height), -pi / 2, -pi, true);
+                  // ..cubicTo(size.width - _shadowWidth * 2, size.height / 4 * 3, size.width - _shadowWidth * 2, size.height / 4, size.width / 2, 0);
+
+      canvas.drawPath(Path.combine(PathOperation.difference, outer, inner),
+        Paint()
         ..isAntiAlias = true
         ..style = PaintingStyle.fill
         ..color = shadowColor
         ..maskFilter = _filter);
     } else if (phase <= 0.75) {
-      double _shadowWidth = (0.75 - phase) / 0.25 * size.width;
-      Path path = Path()
+      double _shadowWidth = (0.75 - phase)/ 0.25 * size.width;
+      Path outer = Path()
                   ..moveTo(size.width / 2, 0)
-                  ..arcTo(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: _shadowWidth / 2), -pi / 2, pi, true)
                   ..arcTo(Rect.fromCircle(center: Offset(size.width / 2, size.height / 2), radius: size.width / 2), -pi / 2, pi, true);
+      Path inner = Path()
+                  ..moveTo(size.width / 2, 0)
+                  ..arcTo(Rect.fromLTWH((size.width - _shadowWidth)/ 2, 0, _shadowWidth, size.height), -pi / 2, pi, true);
                   // ..cubicTo(size.width - _shadowWidth * 2, size.height / 4 * 3, size.width - _shadowWidth * 2, size.height / 4, size.width / 2, 0);
 
-      canvas.drawPath(path, 
+      canvas.drawPath(Path.combine(PathOperation.difference, outer, inner),
         Paint()
         ..isAntiAlias = true
         ..style = PaintingStyle.fill

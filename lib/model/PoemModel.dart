@@ -50,7 +50,7 @@ class Detail {
   @JsonKey(name: 'Content')
   String content;
   @JsonKey(name: 'BreakAfter', includeIfNull: false)
-  bool breakAfter;
+  String breakAfter;
   @JsonKey(name: 'Comments', includeIfNull: false)
   List<Comment> comments;
   

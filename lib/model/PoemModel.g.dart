@@ -60,7 +60,7 @@ Map<String, dynamic> _$PoemToJson(Poem instance) => <String, dynamic>{
 Detail _$DetailFromJson(Map<String, dynamic> json) {
   return Detail(
       content: json['Content'] as String,
-      breakAfter: json['BreakAfter'] as bool,
+      breakAfter: json['BreakAfter'] as String,
       comments: (json['Comments'] as List)
           ?.map((e) =>
               e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
