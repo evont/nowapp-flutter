@@ -14,7 +14,9 @@ class _PoemFuture extends StatefulWidget {
   @override
   _PoemFutureState createState() => _PoemFutureState();
 }
-class _PoemFutureState extends State<_PoemFuture> {
+class _PoemFutureState extends State<_PoemFuture> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   Future future;
   @override
   void initState() {

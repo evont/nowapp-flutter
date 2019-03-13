@@ -17,7 +17,9 @@ class _EnclaveFuture extends StatefulWidget {
   _EnclaveFutureState createState() => _EnclaveFutureState();
 }
 
-class _EnclaveFutureState extends State<_EnclaveFuture> {
+class _EnclaveFutureState extends State<_EnclaveFuture> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   EnclaveListModel model;
   bool isLoading = true;
   List enclaveList = [];

@@ -15,7 +15,9 @@ class _TotheendFuture extends StatefulWidget {
   __TotheendFutureState createState() => __TotheendFutureState();
 }
 
-class __TotheendFutureState extends State<_TotheendFuture> {
+class __TotheendFutureState extends State<_TotheendFuture> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   Future future;
   @override
   void initState() {
