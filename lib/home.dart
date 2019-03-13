@@ -109,6 +109,7 @@ class _HomePageState extends State<_HomePage>{
                       ),
                       new Expanded(child: new _Body(
                         child: new Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               _date(context, data),
                               _moonPhase(context, data),
@@ -266,6 +267,7 @@ Widget _date(BuildContext context, HomeModel data) {
 
 Widget _moonPhase(BuildContext context, HomeModel data) {
   return new Container(
+    padding: const EdgeInsets.only(left: 90, top: 30),
     child: new Stack(
       children: <Widget>[
         new Image(image: new AssetImage('assets/moon.png'), width: 240),

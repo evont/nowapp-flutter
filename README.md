@@ -1,16 +1,13 @@
-# nowapp_flutter
+# 今历 NOW
 
-A new Flutter project.
+基于Flutter 的今历 NOW客户端，适配了Android与IOS。小程序版本[戳这里](https://github.com/evont/nowapp/)，网页版[戳这里](https://now.nefelibata.art/);
 
-## Getting Started
+各版本均由本人进行UI 设计及开发，数据来自[飞地](http://enclavebooks.cn)、[搜韵](https://sou-yun.com)及[每日一文](https://meiriyiwen.com)。希望能多点star作为鼓励，thx : )
 
-This project is a starting point for a Flutter application.
+## 说明
+本项目纯属个人兴趣爱哈，Api 是由自己服务器进行抓取和缓存，感兴趣的可以自己对数据来源进行抓取。
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## 效果图预览
+<div>
+  <img src='./screenshots/Mar-13-2019 13-05-58.gif' width=280>
+</div>
