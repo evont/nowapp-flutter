@@ -7,7 +7,11 @@ class MoonPhase extends CustomPainter{
   void paint(Canvas canvas, Size size) {
     Color shadowColor = Colors.black54;
     MaskFilter _filter = MaskFilter.blur(BlurStyle.normal, 6);
-
+    Paint paint = new Paint()
+        ..isAntiAlias = true
+        ..style = PaintingStyle.fill
+        ..color = shadowColor
+        ..maskFilter = _filter;
     if (phase <= 0.25) {
       // left
       canvas.drawArc(
@@ -15,11 +19,7 @@ class MoonPhase extends CustomPainter{
         -pi / 2,
         -pi,
         false,
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter
+        paint
       );
       double _shadowWidth = size.width - phase / 0.25 * size.width;
       // right
@@ -28,11 +28,7 @@ class MoonPhase extends CustomPainter{
         -pi / 2,
         pi,
         false,
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter
+        paint,
       );
     } else if (phase <= 0.5) {
       double _shadowWidth = (phase - 0.25) / 0.25 * size.width;
@@ -44,12 +40,7 @@ class MoonPhase extends CustomPainter{
                   ..arcTo(Rect.fromLTWH((size.width - _shadowWidth)/ 2, 0, _shadowWidth, size.height), -pi / 2, -pi, true);
                   // ..cubicTo(size.width - _shadowWidth * 2, size.height / 4 * 3, size.width - _shadowWidth * 2, size.height / 4, size.width / 2, 0);
 
-      canvas.drawPath(Path.combine(PathOperation.difference, outer, inner),
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter);
+      canvas.drawPath(Path.combine(PathOperation.difference, outer, inner), paint);
     } else if (phase <= 0.75) {
       double _shadowWidth = (0.75 - phase)/ 0.25 * size.width;
       Path outer = Path()
@@ -60,23 +51,14 @@ class MoonPhase extends CustomPainter{
                   ..arcTo(Rect.fromLTWH((size.width - _shadowWidth)/ 2, 0, _shadowWidth, size.height), -pi / 2, pi, true);
                   // ..cubicTo(size.width - _shadowWidth * 2, size.height / 4 * 3, size.width - _shadowWidth * 2, size.height / 4, size.width / 2, 0);
 
-      canvas.drawPath(Path.combine(PathOperation.difference, outer, inner),
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter);
+      canvas.drawPath(Path.combine(PathOperation.difference, outer, inner), paint);
     } else {
       canvas.drawArc(
         Rect.fromLTWH(0, 0, size.width, size.height),
         -pi / 2,
         pi,
         false,
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter
+        paint
       );
       double _shadowWidth = (phase - 0.75) / 0.25 * size.width;
       canvas.drawArc(
@@ -84,11 +66,7 @@ class MoonPhase extends CustomPainter{
         -pi / 2,
         -pi,
         false,
-        Paint()
-        ..isAntiAlias = true
-        ..style = PaintingStyle.fill
-        ..color = shadowColor
-        ..maskFilter = _filter
+        paint
       );
     }
     

@@ -115,7 +115,6 @@ class _PoemFutureState extends State<_PoemFuture> with AutomaticKeepAliveClientM
                               child: new IconButton(
                                 icon: Image.asset('assets/icon-right.png'),
                                 onPressed: () {
-                                  print('fdaf');
                                   if (_index > 0 && _index >= _total) {
                                     Fluttertoast.showToast(
                                       msg: '没有更多了',
